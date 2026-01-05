@@ -1,0 +1,7 @@
+run = "npm start"
+
+[nix]
+channel = "stable-24_05"
+
+[env]
+# Ensure node is available

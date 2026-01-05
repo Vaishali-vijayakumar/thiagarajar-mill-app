@@ -1,0 +1,81 @@
+import React, { useState } from 'react';
+import { useAuth } from '../context/AuthContext';
+import { useNavigate } from 'react-router-dom';
+
+export default function Login() {
+    const { login } = useAuth();
+    const navigate = useNavigate();
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const res = await login(username, password);
+        if (res.success) {
+            navigate('/dashboard');
+        } else {
+            setError(res.message);
+        }
+    };
+
+    return (
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 relative overflow-hidden">
+            {/* Decorative Background Elements */}
+            <div className="absolute top-0 left-0 w-full h-full bg-white opacity-40 z-0"></div>
+            <div className="absolute -top-40 -right-40 w-96 h-96 bg-indigo-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
+            <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
+
+            <div className="relative z-10 bg-white/80 backdrop-blur-xl border border-white/50 p-10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] w-full max-w-md">
+                <div className="text-center mb-10">
+                    <div className="w-12 h-12 bg-indigo-600 rounded-xl flex items-center justify-center text-white font-bold text-2xl mx-auto mb-4 shadow-lg shadow-indigo-200">C</div>
+                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Cotton<span className="text-indigo-600">Flow</span></h1>
+                    <p className="text-slate-500 mt-2 text-sm font-medium">Contract Lifecycle Management</p>
+                </div>
+
+                {error && (
+                    <div className="bg-red-50 border border-red-100 text-red-600 p-3 rounded-lg mb-6 text-sm text-center font-medium">
+                        {error}
+                    </div>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-slate-700 text-sm font-semibold mb-2">Username</label>
+                        <input
+                            type="text"
+                            className="w-full bg-white border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder-slate-400 shadow-sm"
+                            placeholder="Enter username"
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-slate-700 text-sm font-semibold mb-2">Password</label>
+                        <input
+                            type="password"
+                            className="w-full bg-white border border-slate-200 text-slate-900 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all placeholder-slate-400 shadow-sm"
+                            placeholder="••••••••"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                        />
+                    </div>
+                    <button
+                        type="submit"
+                        className="w-full bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-700 hover:to-blue-700 text-white font-bold py-3.5 rounded-lg shadow-lg hover:shadow-indigo-500/30 transition-all transform hover:-translate-y-0.5"
+                    >
+                        Sign In
+                    </button>
+                </form>
+
+                <div className="mt-8 pt-6 border-t border-slate-100 text-center text-xs text-slate-400">
+                    <p className="font-medium mb-2">Demo Credentials</p>
+                    <div className="flex justify-center space-x-4">
+                        <span className="bg-slate-50 px-3 py-1 rounded border border-slate-100">manager / password</span>
+                        <span className="bg-slate-50 px-3 py-1 rounded border border-slate-100">chairman / password</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
